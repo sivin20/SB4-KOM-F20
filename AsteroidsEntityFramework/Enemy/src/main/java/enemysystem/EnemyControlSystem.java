@@ -1,43 +1,35 @@
-package dk.sdu.mmmi.cbse.playersystem;
+package enemysystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.LEFT;
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.RIGHT;
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.UP;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
 
-/**
- *
- * @author jcs
- */
-public class PlayerControlSystem implements IEntityProcessingService {
+import java.util.Random;
+
+public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
+        for (Entity enemy : world.getEntities(Enemy.class)) {
+            PositionPart positionPart = enemy.getPart(PositionPart.class);
+            MovingPart movingPart = enemy.getPart(MovingPart.class);
 
-        for (Entity player : world.getEntities(Player.class)) {
-            PositionPart positionPart = player.getPart(PositionPart.class);
-            MovingPart movingPart = player.getPart(MovingPart.class);
+            Random rn = new Random();
+            movingPart.setLeft(rn.nextBoolean());
+            movingPart.setRight(rn.nextBoolean());
+            movingPart.setUp(rn.nextBoolean());
 
-            movingPart.setLeft(gameData.getKeys().isDown(LEFT));
-            movingPart.setRight(gameData.getKeys().isDown(RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(UP));
+            movingPart.process(gameData, enemy);
+            positionPart.process(gameData, enemy);
 
-            movingPart.process(gameData, player);
-            positionPart.process(gameData, player);
-
-            updateShape(player);
+            updateShape(enemy);
         }
     }
 
-    private void updateShape(Entity entity) {
+    public void updateShape(Entity entity) {
         float[] shapex = entity.getShapeX();
         float[] shapey = entity.getShapeY();
         PositionPart positionPart = entity.getPart(PositionPart.class);
@@ -60,5 +52,4 @@ public class PlayerControlSystem implements IEntityProcessingService {
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
     }
-
 }

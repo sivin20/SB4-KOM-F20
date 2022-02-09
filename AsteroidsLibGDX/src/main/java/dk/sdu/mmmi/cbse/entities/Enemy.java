@@ -1,16 +1,15 @@
 package dk.sdu.mmmi.cbse.entities;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import dk.sdu.mmmi.cbse.main.Game;
 
 import java.util.ArrayList;
 
-public class Player extends SpaceObject {
+public class Enemy extends SpaceObject {
 
     private final int MAX_BULLETS = 4;
-    private ArrayList<Bullet> bullets;
+    private ArrayList<EnemyBullet> enemyBullets;
 
     private float[] flamex;
     private float[] flamey;
@@ -24,12 +23,12 @@ public class Player extends SpaceObject {
     private float deceleration;
     private float acceleratingTimer;
 
-    public Player(ArrayList<Bullet> bullets) {
+    public Enemy(ArrayList<EnemyBullet> enemyBullets) {
 
-        this.bullets = bullets;
+        this.enemyBullets = enemyBullets;
 
         x = Game.WIDTH / 2;
-        y = Game.HEIGHT / 2;
+        y = Game.HEIGHT / 2 + 100;
 
         maxSpeed = 300;
         acceleration = 200;
@@ -70,10 +69,10 @@ public class Player extends SpaceObject {
     }
 
     public void shoot() {
-        if(bullets.size() == MAX_BULLETS) {
+        if(enemyBullets.size() == MAX_BULLETS) {
             return;
         } else {
-            bullets.add(new Bullet(x, y, radians));
+            enemyBullets.add(new EnemyBullet(x, y, radians));
         }
     }
 
@@ -141,14 +140,14 @@ public class Player extends SpaceObject {
 
     public void draw(ShapeRenderer sr) {
 
-        sr.setColor(1, 1, 1, 1);
+        sr.setColor(255, 0, 0,1);
 
-        sr.begin(ShapeType.Line);
+        sr.begin(ShapeRenderer.ShapeType.Line);
 
         // draw ship
         for (int i = 0, j = shapex.length - 1;
-                i < shapex.length;
-                j = i++) {
+             i < shapex.length;
+             j = i++) {
 
             sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
 
@@ -167,5 +166,4 @@ public class Player extends SpaceObject {
         sr.end();
 
     }
-
 }
