@@ -4,6 +4,7 @@ import asteroidsystem.Asteroid;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
@@ -16,48 +17,46 @@ import java.util.Map;
 
 public class CollisionControlSystem implements IPostEntityProcessingService {
 
-    List<Entity> asteroidList = new ArrayList<>();
-    Map<String, Entity> entityMap = new HashMap<>();
-
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity player : world.getEntities(Player.class)) {
-            PositionPart positionPart = player.getPart(PositionPart.class);
-            MovingPart movingPart = player.getPart(MovingPart.class);
+        for (Entity entity : world.getEntities()) {
+            for (Entity collisionDetection : world.getEntities()) {
+                // get life parts on all entities
+                LifePart entityLife = entity.getPart(LifePart.class);
 
-            movingPart.process(gameData, player);
-            positionPart.process(gameData, player);
-            entityMap.put("player", player);
-        }
+                // if the two entities are identical, skip the iteration
+                if (entity.getID().equals(collisionDetection.getID())) {
+                    continue;
 
-        for (Entity asteroid : world.getEntities(Asteroid.class)) {
-            PositionPart positionPart = asteroid.getPart(PositionPart.class);
-            MovingPart movingPart = asteroid.getPart(MovingPart.class);
+                    // remove entities with zero in expiration
+                }
 
-            movingPart.process(gameData, asteroid);
-            positionPart.process(gameData, asteroid);
-            entityMap.put("asteroid", asteroid);
-            if(checkCollision(entityMap)){
-                System.out.println("Collision detected");
-                //world.removeEntity("ASTEROID ID");
+                // CollisionDetection
+                if (this.checkCollision(entity, collisionDetection)) {
+                    // if entity has been hit, and should have its life reduced
+                    if (entityLife.getLife() > 0) {
+                        entityLife.setLife(entityLife.getLife() - 1);
+                        entityLife.setIsHit(true);
+                        // if entity is out of life - remove
+                        if (entityLife.getLife() <= 0) {
+                            world.removeEntity(entity);
+                        }
+                    }
+                }
             }
         }
-
-
     }
 
-    private boolean checkCollision(Map<String, Entity> entities) {
-        Entity player = entities.get("player");
-        Entity asteroid = entities.get("asteroid");
+    private boolean checkCollision(Entity entity, Entity collisionDetection) {
 
-        float circle1r = player.getRadius();
-        PositionPart circle1pos = player.getPart(PositionPart.class);
+        float circle1r = entity.getRadius();
+        PositionPart circle1pos = entity.getPart(PositionPart.class);
         float circle1x = circle1pos.getX();
         float circle1y = circle1pos.getY();
 
 
-        float circle2r = asteroid.getRadius();
-        PositionPart circle2pos = asteroid.getPart(PositionPart.class);
+        float circle2r = collisionDetection.getRadius();
+        PositionPart circle2pos = collisionDetection.getPart(PositionPart.class);
         float circle2x = circle2pos.getX();
         float circle2y = circle2pos.getY();
 
