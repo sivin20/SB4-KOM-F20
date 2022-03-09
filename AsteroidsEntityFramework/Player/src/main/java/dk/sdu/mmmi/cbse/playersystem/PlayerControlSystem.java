@@ -1,6 +1,6 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
-import commonbullet.BulletSPI;
+import commonbullet.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.LEFT;
@@ -13,11 +13,10 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.util.SPILocator;
 import org.openide.util.Lookup;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import java.util.Collection;
 
 /**
  *
@@ -38,8 +37,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
             movingPart.setUp(gameData.getKeys().isDown(UP));
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                Entity bullet = Lookup.getDefault().lookup(BulletSPI.class).createBullet(player, gameData);
-                world.addEntity(bullet);
+                Collection<? extends BulletSPI> bulletSPI = getBulletSPI();
+                for(BulletSPI spi : bulletSPI) {
+                    Entity bullet = spi.createBullet(player, gameData);
+                    world.addEntity(bullet);
+                }
+
             }
 
             movingPart.process(gameData, player);
@@ -48,6 +51,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             updateShape(player);
         }
+    }
+
+    private Collection<? extends BulletSPI> getBulletSPI() {
+        return SPILocator.locateAll(BulletSPI.class);
     }
 
     private void updateShape(Entity entity) {

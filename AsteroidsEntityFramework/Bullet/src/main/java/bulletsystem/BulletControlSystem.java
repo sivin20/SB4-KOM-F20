@@ -1,6 +1,6 @@
 package bulletsystem;
 
-import commonbullet.BulletSPI;
+import commonbullet.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
