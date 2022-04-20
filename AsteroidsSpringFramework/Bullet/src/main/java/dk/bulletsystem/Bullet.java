@@ -1,4 +1,4 @@
-package bulletsystem;
+package dk.bulletsystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 

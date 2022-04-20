@@ -1,21 +1,19 @@
-package collisionsystem;
+package dk.collisionsystem;
 
-import asteroidsystem.Asteroid;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.mmmi.cbse.playersystem.Player;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+@Component
 public class CollisionControlSystem implements IPostEntityProcessingService {
+
+    public CollisionControlSystem() {
+
+    }
 
     @Override
     public void process(GameData gameData, World world) {

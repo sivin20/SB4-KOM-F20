@@ -1,4 +1,4 @@
-package asteroidsystem;
+package dk.asteroidsystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -7,10 +7,16 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+@Component
 public class AsteroidControlSystem implements IEntityProcessingService {
+
+    public AsteroidControlSystem(){
+
+    }
 
     private Random rn = new Random();
     private float[] dicts = new float[8];

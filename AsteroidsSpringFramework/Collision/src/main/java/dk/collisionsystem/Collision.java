@@ -1,4 +1,4 @@
-package collisionsystem;
+package dk.collisionsystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 

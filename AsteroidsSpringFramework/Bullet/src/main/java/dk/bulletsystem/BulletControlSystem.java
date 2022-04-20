@@ -1,6 +1,6 @@
-package bulletsystem;
+package dk.bulletsystem;
 
-import commonbullet.services.BulletSPI;
+import dk.commonbullet.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -8,11 +8,18 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import org.springframework.stereotype.Component;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+@Component
 public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
+
+    public BulletControlSystem(){
+
+    }
+
     @Override
     public void process(GameData gameData, World world) {
 

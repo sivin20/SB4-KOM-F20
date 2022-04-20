@@ -1,31 +1,24 @@
 package dk.sdu.mmmi.cbse.main;
 
-import asteroidsystem.AsteroidControlSystem;
-import asteroidsystem.AsteroidPlugin;
-import collisionsystem.CollisionControlSystem;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import commonbullet.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import enemysystem.EnemyControlSystem;
 import dk.sdu.mmmi.cbse.managers.GameInputProcessor;
-import dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
-import dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
-import enemysystem.EnemyPlugin;
-import dk.sdu.mmmi.cbse.common.util.SPILocator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+@Component
 public class Game
         implements ApplicationListener {
 
@@ -33,8 +26,12 @@ public class Game
     private ShapeRenderer sr;
 
     private final GameData gameData = new GameData();
+    @Autowired
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
+    @Autowired
     private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
+    @Autowired
+    private List<IGamePluginService> pluginServices = new ArrayList<>();
     private World world = new World();
 
     @Override
@@ -77,11 +74,12 @@ public class Game
 
     private void update() {
         // Update
-        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+
+        for (IEntityProcessingService entityProcessorService : getEntityProcessors()) {
             entityProcessorService.process(gameData, world);
         }
 
-        for (IPostEntityProcessingService postEntityProcessingService : getPostEntityProcessingServices()) {
+        for (IPostEntityProcessingService postEntityProcessingService : getPostEntityProcessors()) {
             postEntityProcessingService.process(gameData, world);
         }
     }
@@ -123,16 +121,28 @@ public class Game
     public void dispose() {
     }
 
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return SPILocator.locateAll(IGamePluginService.class);
+
+    public void setPostEntityProcessors(List<IPostEntityProcessingService> postEntityProcessors) {
+        this.postEntityProcessors = postEntityProcessors;
     }
 
-    private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return SPILocator.locateAll(IEntityProcessingService.class);
+    public void setEntityProcessors(List<IEntityProcessingService> entityProcessors) {
+        this.entityProcessors = entityProcessors;
     }
 
-    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
-        return SPILocator.locateAll(IPostEntityProcessingService.class);
+    public List<IEntityProcessingService> getEntityProcessors() {
+        return entityProcessors;
     }
 
+    public List<IPostEntityProcessingService> getPostEntityProcessors() {
+        return postEntityProcessors;
+    }
+
+    public List<IGamePluginService> getPluginServices() {
+        return pluginServices;
+    }
+
+    public void setPluginServices(List<IGamePluginService> pluginServices) {
+        this.pluginServices = pluginServices;
+    }
 }

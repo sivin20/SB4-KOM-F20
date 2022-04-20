@@ -1,6 +1,7 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
-import commonbullet.services.BulletSPI;
+import dk.commonbullet.Bullet;
+import dk.commonbullet.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.LEFT;
@@ -13,16 +14,28 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.util.SPILocator;
-import org.openide.util.Lookup;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
  * @author jcs
  */
+@Component
 public class PlayerControlSystem implements IEntityProcessingService {
+
+    @Autowired
+    private List<BulletSPI> bulletSPIList = new ArrayList<>();
+
+    public PlayerControlSystem(){
+
+    }
 
     @Override
     public void process(GameData gameData, World world) {
@@ -37,8 +50,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             movingPart.setUp(gameData.getKeys().isDown(UP));
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                Collection<? extends BulletSPI> bulletSPI = getBulletSPI();
-                for(BulletSPI spi : bulletSPI) {
+                for(BulletSPI spi : getBulletSPIList()) {
                     Entity bullet = spi.createBullet(player, gameData);
                     world.addEntity(bullet);
                 }
@@ -51,10 +63,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             updateShape(player);
         }
-    }
-
-    private Collection<? extends BulletSPI> getBulletSPI() {
-        return SPILocator.locateAll(BulletSPI.class);
     }
 
     private void updateShape(Entity entity) {
@@ -82,4 +90,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
         entity.setShapeY(shapey);
     }
 
+    public List<BulletSPI> getBulletSPIList() {
+        return bulletSPIList;
+    }
+
+    public void setBulletSPIList(List<BulletSPI> bulletSPIList) {
+        this.bulletSPIList = bulletSPIList;
+    }
 }
