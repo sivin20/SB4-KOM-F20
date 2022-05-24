@@ -18,17 +18,8 @@ import static org.mockito.Mockito.*;
 
 public class EnemyTest {
 
-    BulletSPI mockBulletSPI = mock(BulletSPI.class);
-    EnemyPlugin mockEnemyPlugin = mock(EnemyPlugin.class);
-
     World mockWorld = mock(World.class);
-
     GameData mockGameData = mock(GameData.class);
-
-    @Test
-    public void testEnemyLaser(){
-        //Entity enemy = mockEnemyPlugin.start();
-    }
 
     @Test
     public void testEnemyMovement(){
@@ -49,5 +40,10 @@ public class EnemyTest {
             processor.process(mockGameData, mockWorld);
         }
         assertNotEquals(10,positionPart.getX());
+    }
+
+    @Test
+    public void testEnemyLaser(){
+        //Entity enemy = mockEnemyPlugin.start();
     }
 }
