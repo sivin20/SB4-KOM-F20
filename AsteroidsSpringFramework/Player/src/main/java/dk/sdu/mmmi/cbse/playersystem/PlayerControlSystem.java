@@ -15,7 +15,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.cbse.common.util.SPILocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,18 +22,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- *
- * @author jcs
- */
 @Component
 public class PlayerControlSystem implements IEntityProcessingService {
 
+
+    private List<BulletSPI> bulletSPIList;
+
     @Autowired
-    private List<BulletSPI> bulletSPIList = new ArrayList<>();
-
-    public PlayerControlSystem(){
-
+    public PlayerControlSystem(List<BulletSPI> bulletSPIList){
+        this.bulletSPIList = bulletSPIList;
     }
 
     @Override

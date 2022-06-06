@@ -19,7 +19,6 @@ public class Main {
 		cfg.resizable = false;
 		
 		new LwjglApplication(context.getBean(Game.class), cfg);
-		
 	}
 	
 }

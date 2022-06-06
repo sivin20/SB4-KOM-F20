@@ -26,6 +26,7 @@ public class Game
     private ShapeRenderer sr;
 
     private final GameData gameData = new GameData();
+
     @Autowired
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     @Autowired
