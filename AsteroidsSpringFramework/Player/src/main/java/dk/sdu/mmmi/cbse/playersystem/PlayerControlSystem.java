@@ -25,12 +25,30 @@ import java.util.List;
 @Component
 public class PlayerControlSystem implements IEntityProcessingService {
 
+    //Setter injection
+    @Autowired
+    private List<BulletSPI> bulletSPIList = new ArrayList<>();
 
+    public void setBulletSPIList(List<BulletSPI> bulletSPIList) {
+        this.bulletSPIList = bulletSPIList;
+    }
+
+    public PlayerControlSystem(){}
+
+
+    // Constructor injection
+/*
     private List<BulletSPI> bulletSPIList;
 
     @Autowired
     public PlayerControlSystem(List<BulletSPI> bulletSPIList){
         this.bulletSPIList = bulletSPIList;
+    }
+
+ */
+    // Getter
+    public List<BulletSPI> getBulletSPIList() {
+        return bulletSPIList;
     }
 
     @Override
@@ -84,13 +102,5 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
-    }
-
-    public List<BulletSPI> getBulletSPIList() {
-        return bulletSPIList;
-    }
-
-    public void setBulletSPIList(List<BulletSPI> bulletSPIList) {
-        this.bulletSPIList = bulletSPIList;
     }
 }
