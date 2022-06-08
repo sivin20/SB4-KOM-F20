@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import dk.asteroidsystem.AsteroidControlSystem;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -26,6 +27,9 @@ public class Game
     private ShapeRenderer sr;
 
     private final GameData gameData = new GameData();
+
+    @Autowired
+    AsteroidControlSystem asteroidControlSystem;
 
     @Autowired
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
@@ -122,15 +126,6 @@ public class Game
     public void dispose() {
     }
 
-
-    public void setPostEntityProcessors(List<IPostEntityProcessingService> postEntityProcessors) {
-        this.postEntityProcessors = postEntityProcessors;
-    }
-
-    public void setEntityProcessors(List<IEntityProcessingService> entityProcessors) {
-        this.entityProcessors = entityProcessors;
-    }
-
     public List<IEntityProcessingService> getEntityProcessors() {
         return entityProcessors;
     }
@@ -143,7 +138,5 @@ public class Game
         return pluginServices;
     }
 
-    public void setPluginServices(List<IGamePluginService> pluginServices) {
-        this.pluginServices = pluginServices;
-    }
+
 }
